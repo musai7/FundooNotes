@@ -1,15 +1,7 @@
 import React, {useState} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Pressable,
-  ScrollView,
-  Alert,
-} from 'react-native';
+import {Text, View, StyleSheet, Pressable, ScrollView} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
-import auth from '@react-native-firebase/auth';
-
+import {SignUp} from '../Services/Auth/Authantication';
 const CreateAccount = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -23,6 +15,24 @@ const CreateAccount = ({navigation}) => {
   const [errorPassword, setErrorPassword] = useState('');
   const [errorUserName, setErrorUserName] = useState('');
   const [errorConPassword, seterrorConPassword] = useState('');
+
+  // const ref = firebase.firestore().collection('user Information');
+
+  // const addUserInformation = () => {
+  //   ref
+  //     .add({
+  //       name: userName,
+  //       emailId: email,
+  //     })
+  //     .then(() => {
+  //       setUserName('');
+  //       setEmail('');
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //       setErrorMessege('Email in use');
+  //     });
+  // };
 
   const validateEmailOnBlur = () => {
     const emailPattern = new RegExp(
@@ -42,7 +52,6 @@ const CreateAccount = ({navigation}) => {
     const passwordPattern = new RegExp(
       '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})',
     );
-    let count = 0;
     if (!password) {
       setErrorPassword('empty field');
     }
@@ -51,7 +60,6 @@ const CreateAccount = ({navigation}) => {
     }
     if (passwordPattern.test(password)) {
       setErrorPassword('');
-      count++;
     }
   };
 
@@ -67,6 +75,7 @@ const CreateAccount = ({navigation}) => {
       setErrorUserName('');
     }
   };
+
   const validateConfimPasswordlOnBlur = () => {
     if (!confirmPassword) {
       seterrorConPassword('empty Filed');
@@ -78,20 +87,24 @@ const CreateAccount = ({navigation}) => {
       seterrorConPassword('');
     }
   };
+  const navigateToSignUp = () => {
+    navigation.replace('SignIn');
+  };
 
-  // const CreateUser = async (email, password) => {
-  //   try {
-  //     let response = await auth().createUserWithEmailAndPassword(
-  //       email,
-  //       password,
-  //     );
-  //     if (response) {
-  //       console.log('success');
-  //     }
-  //   } catch (e) {
-  //     console.error(e.message);
-  //   }
-  // };
+  const signUpButton = () => {
+    if (!email) setErrorMessege('required Field');
+    if (!userName) setErrorUserName('required Field');
+    if (!password) setErrorPassword('required Field');
+    if (!confirmPassword) seterrorConPassword('confirmPassword');
+    else if (
+      errorMessage === '' &&
+      errorUserName === '' &&
+      errorPassword === '' &&
+      errorConPassword === ''
+    ) {
+      SignUp(userName, email, password, navigateToSignUp);
+    }
+  };
 
   return (
     <ScrollView style={Styles.container}>
@@ -168,29 +181,12 @@ const CreateAccount = ({navigation}) => {
           <Button
             mode="contained"
             style={{color: 'green'}}
-            onPress={() => {
-              if (!(email || userName || password || confirmPassword)) {
-                alert('Fill the empty fields');
-              } else if (
-                errorMessage === '' &&
-                errorUserName === '' &&
-                errorPassword === '' &&
-                errorConPassword === ''
-              ) {
-                signUp(email, password);
-                navigation.replace('SignIn');
-              } else alert('enter with valid details');
-            }}>
+            onPress={signUpButton}>
             Sign Up
           </Button>
         </View>
         <View style={Styles.view}>
-          <Pressable
-            onPress={() => {
-              if (true) {
-                navigation.replace('SignIn');
-              }
-            }}>
+          <Pressable onPress={() => navigation.replace('SignIn')}>
             <Text
               style={{
                 color: 'blue',

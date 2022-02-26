@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {Text, View, StyleSheet, Pressable, ScrollView} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
-import InputFieldValidation from '../Validation/InputFieldsValidation';
-import auth from '@react-native-firebase/auth';
-import {Alert} from 'react-native';
+import {SingIn} from '../Services/Auth/Authantication';
+import {AuthContext} from '../navigation/AuthContext';
 
 const Loginpage = ({navigation}) => {
   const [password, setPassword] = useState('');
@@ -12,7 +11,15 @@ const Loginpage = ({navigation}) => {
   const [errorPassword, setErrorPassword] = useState('');
   const [passwordVisibility, setpasswordVisibility] = useState(true);
 
-  // const {validateEmailOnBlur, email, errorMessage} = InputFieldValidation;
+  const {setToken} = useContext(AuthContext);
+
+  const setTokenValue = uid => {
+    setToken(uid);
+  };
+
+  const navigateToHomePage = () => {
+    navigation.navigate('HomePage');
+  };
 
   const OnpressHandler = () => {
     if (!(email || password)) {
@@ -20,8 +27,7 @@ const Loginpage = ({navigation}) => {
     } else if (email == ' ' || password == ' ') {
       alert('Fill space the empty fields');
     } else if (errorMessage === '' && errorPassword === '') {
-      SingIn(email, password);
-      navigation.navigate('Login');
+      SingIn(email, password, setTokenValue);
     } else alert('Email or password are not matched');
   };
 
@@ -51,17 +57,6 @@ const Loginpage = ({navigation}) => {
     }
     if (passwordPattern.test(password)) {
       setErrorPassword('');
-    }
-  };
-
-  const SingIn = async (email, password) => {
-    try {
-      let response = await auth().signInWithEmailAndPassword(email, password);
-      if (response && response.user) {
-        Alert.alert('Success ✅', 'Authenticated successfully');
-      }
-    } catch (e) {
-      console.error(e.message);
     }
   };
 

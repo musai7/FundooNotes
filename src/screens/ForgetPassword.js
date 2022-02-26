@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, View, ScrollView, StyleSheet} from 'react-native';
-import {TextInput} from 'react-native-paper';
+import {TextInput, Button} from 'react-native-paper';
+import {firebase} from '@react-native-firebase/auth';
 const ForgetPassword = () => {
   const [email, setEmail] = React.useState('');
   const [errorMessage, setErrorMessege] = React.useState('');
@@ -17,8 +18,19 @@ const ForgetPassword = () => {
     }
     if (emailPattern.test(email)) {
       setErrorMessege('');
-      setCheck(check + 1);
     }
+  };
+
+  const passwordReset = () => {
+    firebase
+      .auth()
+      .sendPasswordResetEmail(email)
+      .then(function (user) {
+        alert('Please check your email...');
+      })
+      .catch(function (e) {
+        console.log(e);
+      });
   };
 
   return (
@@ -37,6 +49,14 @@ const ForgetPassword = () => {
           onChangeText={text => setEmail(text)}
           onBlur={validateEmailOnBlur}
         />
+      </View>
+      <View style={Styles.button}>
+        <Button
+          mode="contained"
+          style={{color: 'green'}}
+          onPress={passwordReset}>
+          send request
+        </Button>
       </View>
     </ScrollView>
   );
@@ -67,6 +87,10 @@ const Styles = StyleSheet.create({
     height: 40,
     width: '75%',
     borderRadius: 7,
+  },
+  button: {
+    flex: 2,
+    alignItems: 'center',
   },
 });
 export {ForgetPassword};
