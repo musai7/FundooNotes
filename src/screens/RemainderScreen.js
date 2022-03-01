@@ -3,10 +3,10 @@ import {View, Text, ScrollView} from 'react-native';
 import Header from '../components/Header';
 import BottomBar from '../components/BottomBar';
 
-const Remainder = () => {
+const Remainder = ({navigation}) => {
   return (
     <View style={{flex: 1}}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={{flex: 15}}>
         <ScrollView>
           <Text style={{color: 'green', fontSize: 30}}>Remainder Screen</Text>

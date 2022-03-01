@@ -4,13 +4,14 @@ import {Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import useImagePicker from './ImagePicker';
 import SignOut from '../screens/SignOut';
+import {useNavigation} from '@react-navigation/native';
 
-const Header = ({navigation}) => {
+const Header = () => {
+  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modal, setModal] = useState(false);
   const {openCamera, openGalary, imageUri, userName, email} = useImagePicker();
 
-  // console.log('IMage url', imageUri);
   const {handleSignOut} = SignOut();
 
   const onPressHandler = () => {
@@ -39,7 +40,7 @@ const Header = ({navigation}) => {
           {imageUri ? (
             <Avatar.Image source={imageUri} size={30} />
           ) : (
-            <Avatar.Icon label="k" size={30} />
+            <Avatar.Icon label={userName.charAt(0)} size={30} />
           )}
         </TouchableOpacity>
         <Modal
@@ -56,7 +57,7 @@ const Header = ({navigation}) => {
                 {imageUri ? (
                   <Avatar.Image source={imageUri} size={60} />
                 ) : (
-                  <Avatar.Text label="k" />
+                  <Avatar.Text label={userName.charAt(0)} />
                 )}
               </TouchableOpacity>
               <Modal transparent={true} animationType="fade" visible={modal}>
@@ -111,7 +112,6 @@ export default Header;
 
 const Styles = StyleSheet.create({
   container: {
-    flex: 1,
     borderWidth: 1,
     borderRadius: 25,
     margin: '5%',
@@ -120,7 +120,7 @@ const Styles = StyleSheet.create({
     paddingHorizontal: '4%',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '30%',
+    height: '7%',
     width: '90%',
   },
   view: {
