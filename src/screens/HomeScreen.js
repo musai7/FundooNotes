@@ -1,41 +1,34 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Text, View, ScrollView, FlatList} from 'react-native';
+import {Text, View, StyleSheet, FlatList} from 'react-native';
 import Header from '../components/Header';
 import BottomBar from '../components/BottomBar';
 import Notes from '../components/Notes';
-import {firebase} from '@react-native-firebase/firestore';
-import {FetchNoteData} from '../Services/FetchUserNotes';
-import NotesFlatList from '../components/NotesFlatList';
+import useFetchNotes from '../Services/data/FetchNotes';
 
 const HomeScreen = ({navigation}) => {
-  const {noteData, fetchNoteData} = NotesFlatList();
-  console.log('Notes Flat List home Data ', noteData);
-  // var notedata;
+  const {noteData, fetchNoteData} = useFetchNotes();
 
   useEffect(() => {
-    fetchNoteData();
-  }, []);
+    const unsibscribe = navigation.addListener('focus', () => fetchNoteData());
+    return unsibscribe;
+  }, [navigation]);
 
-  let array = [
-    {key: 'hello', demo: 'data'},
-    {key: 'jbjhj', demo: 'data'},
-  ];
-  // console.log('out side ', notedata);
   return (
-    <View style={{flex: 1, flexDirection: 'column'}}>
+    <View style={Styles.container}>
       <Header navigation={navigation} />
       <View style={{flex: 1}}>
-        <Text style={{color: 'red', fontSize: 30}}>HOME PAGE</Text>
-        <View>
-          <FlatList
-            style={{color: 'red'}}
-            data={noteData}
-            // numColumns={2}
-            // keyExtractor={item => item.key}
-            renderItem={({item}) => <Notes item={item} />}
-            navigation={navigation}
-          />
-        </View>
+        <FlatList
+          data={noteData}
+          numColumns={2}
+          // keyExtractor={item => item.key}
+          renderItem={({item}) => <Notes item={item} />}
+          navigation={navigation}
+        />
+        {!noteData.length ? (
+          <View style={Styles.noteView}>
+            <Text style={Styles.text}>Notes</Text>
+          </View>
+        ) : null}
       </View>
       <View>
         <BottomBar navigation={navigation} />
@@ -45,3 +38,15 @@ const HomeScreen = ({navigation}) => {
 };
 
 export default HomeScreen;
+
+const Styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  noteView: {
+    alignItems: 'center',
+    marginBottom: '60%',
+  },
+  text: {color: 'gray', fontSize: 30},
+});

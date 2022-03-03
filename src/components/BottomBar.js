@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const BottomBar = () => {
   const navigation = useNavigation();
+  const [isUpDate, setIsUpdate] = useState(false);
+
   return (
     <View>
       <View
@@ -18,7 +20,12 @@ const BottomBar = () => {
           onPress={() => {
             navigation.navigate('NewNotes');
           }}>
-          <FontAwesome name="plus" color={'rgba(0, 0, 0, 0.8) '} size={40} />
+          <FontAwesome
+            isUpDate={isUpDate}
+            name="plus"
+            color={'rgba(0, 0, 0, 0.8) '}
+            size={40}
+          />
         </TouchableOpacity>
       </View>
       <View

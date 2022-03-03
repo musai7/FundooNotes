@@ -9,7 +9,7 @@ import HomeScreen from '../screens/HomeScreen';
 import {ForgetPassword} from '../screens/ForgetPassword';
 import {CreateAccount} from '../screens/CreateAccount';
 import {AuthProvider} from './AuthContext';
-import MyDrawer from '../components/Drawer';
+import MyDrawer from './drawer/Drawer';
 import NewListNote from '../screens/NewListNote';
 import NewPhotoNote from '../screens/NewPhotoNote';
 import NewAudioNote from '../screens/NewAudioNote';

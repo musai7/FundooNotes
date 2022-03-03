@@ -8,37 +8,26 @@ import {
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {firebase} from '@react-native-firebase/firestore';
-import {AuthContext} from '../navigation/AuthContext';
+import useFetchNotes from '../Services/data/FetchNotes';
+import {useRoute} from '@react-navigation/native';
 
 const NewNotes = ({navigation}) => {
-  const [title, setTitle] = useState('');
-  const [note, setNote] = useState('');
-  const {token} = useContext(AuthContext);
-  // console.log('token', token);
-  // console.log(title);
-  // console.log(note);
-  const response = firebase.firestore().collection('userNotes');
+  const noteData = useRoute().params;
+  // const route = useRoute();
+  console.log('Note Data', noteData);
 
-  const storeData = async () => {
-    try {
-      if (note.length !== 0 || title.length !== 0) {
-        await response.doc(token).collection('notes').add({
-          title: title,
-          note: note,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const {storeData} = useFetchNotes();
+  const [title, setTitle] = useState(noteData?.title || '');
+  const [note, setNote] = useState(noteData?.note || '');
+  const [isUpDate, setIsUpDate] = useState(noteData?.isUpDate || '');
+  const [key, setKey] = useState(noteData?.key || '');
 
   return (
     <View>
       <View style={Styles.header}>
         <TouchableOpacity
           onPress={() => {
-            storeData();
+            storeData(title, isUpDate, key);
             navigation.goBack();
           }}>
           <AntDesign name="arrowleft" size={25} color={'black'} />
@@ -63,15 +52,16 @@ const NewNotes = ({navigation}) => {
 
       <TextInput
         style={Styles.titleTextInput}
+        value={title}
         placeholder="Title"
         placeholderTextColor={'gray'}
         onChangeText={text => {
           setTitle(text);
         }}
-        // onBlur={setNote(note)}
       />
       <TextInput
         style={Styles.notesTextInput}
+        value={note}
         placeholder="Notes"
         placeholderTextColor={'gray'}
         multiline={true}
