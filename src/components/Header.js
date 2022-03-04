@@ -18,93 +18,130 @@ const Header = () => {
     setModalVisible(true);
   };
 
-  return (
-    <View style={Styles.container}>
-      <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity
-          style={{marginRight: 10}}
-          onPress={() => {
-            navigation.openDrawer();
-          }}>
-          <Icon name="menu" color={'black'} size={30} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
-          <Text style={Styles.text}>SearchNotes</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity style={{marginRight: 10}}>
-          <Icon name="ios-grid-outline" color={'black'} size={30} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onPressHandler}>
-          {imageUri ? (
-            <Avatar.Image source={imageUri} size={30} />
-          ) : (
-            <Avatar.Icon label={userName.charAt(0)} size={30} />
-          )}
-        </TouchableOpacity>
-        <Modal
-          transparent={true}
-          animationType="slide"
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}>
-          <View style={Styles.modalView}>
-            <View style={{alignItems: 'center'}}>
-              <TouchableOpacity
-                onPress={() => {
-                  setModal(true);
-                }}>
-                {imageUri ? (
-                  <Avatar.Image source={imageUri} size={60} />
-                ) : (
-                  <Avatar.Text label={userName.charAt(0)} />
-                )}
-              </TouchableOpacity>
-              <Modal transparent={true} animationType="fade" visible={modal}>
-                <View style={Styles.modalView2}>
-                  <Text style={Styles.text}>Choose Image From </Text>
-                  <TouchableOpacity
-                    style={{paddingRight: 20}}
-                    onPress={() => {
-                      openCamera();
-                      setModal('false');
-                    }}>
-                    <Text style={Styles.text}>Camera</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      openGalary();
-                      setModal('false');
-                    }}>
-                    <Text style={Styles.text}>Gallery</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModal(false);
-                    }}>
-                    <Text style={Styles.text}>Close</Text>
-                  </TouchableOpacity>
-                </View>
-              </Modal>
-              <Text style={Styles.text}>{userName}</Text>
-              <Text style={Styles.text}>{email}</Text>
-            </View>
+  return true ? (
+    <>
+      <View style={Styles.container}>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            style={{marginRight: 10}}
+            onPress={() => {
+              navigation.openDrawer();
+            }}>
+            <Icon name="menu" color={'black'} size={30} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
+            <Text style={Styles.text}>SearchNotes</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity style={{marginRight: 10}}>
+            <Icon name="ios-grid-outline" color={'black'} size={30} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onPressHandler}>
+            {imageUri ? (
+              <Avatar.Image source={imageUri} size={30} />
+            ) : (
+              <Avatar.Icon label={userName.charAt(0)} size={30} />
+            )}
+          </TouchableOpacity>
+          <Modal
+            transparent={true}
+            animationType="slide"
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}>
+            <View style={Styles.modalView}>
+              <View style={{alignItems: 'center'}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModal(true);
+                  }}>
+                  {imageUri ? (
+                    <Avatar.Image source={imageUri} size={60} />
+                  ) : (
+                    <Avatar.Text label={userName.charAt(0)} />
+                  )}
+                </TouchableOpacity>
+                <Modal transparent={true} animationType="fade" visible={modal}>
+                  <View style={Styles.modalView2}>
+                    <Text style={Styles.text}>Choose Image From </Text>
+                    <TouchableOpacity
+                      style={{paddingRight: 20}}
+                      onPress={() => {
+                        openCamera();
+                        setModal('false');
+                      }}>
+                      <Text style={Styles.text}>Camera</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        openGalary();
+                        setModal('false');
+                      }}>
+                      <Text style={Styles.text}>Gallery</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setModal(false);
+                      }}>
+                      <Text style={Styles.text}>Close</Text>
+                    </TouchableOpacity>
+                  </View>
+                </Modal>
+                <Text style={Styles.text}>{userName}</Text>
+                <Text style={Styles.text}>{email}</Text>
+              </View>
 
-            <View style={Styles.view}>
-              <TouchableOpacity onPress={handleSignOut}>
-                <Text style={Styles.text}>SignOut</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setModalVisible(false);
-                }}>
-                <Text style={Styles.text}>Close</Text>
-              </TouchableOpacity>
+              <View style={Styles.view}>
+                <TouchableOpacity onPress={handleSignOut}>
+                  <Text style={Styles.text}>SignOut</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(false);
+                  }}>
+                  <Text style={Styles.text}>Close</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
+        </View>
       </View>
-    </View>
+    </>
+  ) : (
+    <>
+      <View style={Styles.falseContainer}>
+        <View style={Styles.modalView}>
+          <TouchableOpacity
+            onPress={() => {
+              setModalVisible(false);
+            }}>
+            <Icon style={Styles.icon} name="cross" size={35} color={'black'} />
+          </TouchableOpacity>
+          <View style={Styles.viewIcons}>
+            <TouchableOpacity
+              onPress={() => {
+                // OnPinPressed();
+              }}>
+              <AntDesign
+                style={Styles.icon}
+                name={pin ? 'pushpin' : 'pushpino'}
+                size={25}
+                color={'black'}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {}}>
+              <AntDesign
+                style={Styles.icon}
+                name="bells"
+                size={25}
+                color={'black'}
+              />
+            </TouchableOpacity>
+            <ThreeDotsModal item={item} />
+          </View>
+        </View>
+      </View>
+    </>
   );
 };
 
@@ -114,8 +151,9 @@ const Styles = StyleSheet.create({
   container: {
     borderWidth: 1,
     borderRadius: 25,
-    margin: '5%',
-    padding: '2%',
+    margin: '2%',
+    alignSelf: 'center',
+    // padding: '2%',
     flexDirection: 'row',
     paddingHorizontal: '4%',
     justifyContent: 'space-between',
@@ -152,5 +190,10 @@ const Styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: 'black',
+  },
+  falseContainer: {
+    // borderWidth: 1,
+    // borderRadius: 25,
+    height: '7%',
   },
 });

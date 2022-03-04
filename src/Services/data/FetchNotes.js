@@ -10,12 +10,14 @@ const useFetchNotes = () => {
   const {token} = useContext(AuthContext);
   const [pinNoteData, setPinNoteData] = useState([]);
   const [unPinNoteData, setUnPinNoteData] = useState([]);
+  const [archieveData, setArchieve] = useState([]);
 
   const response = firebase.firestore().collection('userNotes');
 
   const fetchNoteData = async () => {
     let pinNotesArray = [];
     let unPinNotesArray = [];
+    let archieveArray = [];
     await firestore()
       .collection('userNotes')
       .doc(token)
@@ -30,11 +32,15 @@ const useFetchNotes = () => {
           } else {
             unPinNotesArray.push(data);
           }
+          if (data.archieve) {
+            archieveArray.push(data);
+          }
         });
         setPinNoteData(pinNotesArray);
         setUnPinNoteData(unPinNotesArray);
+        setArchieve(archieveArray);
+        console.log('archieveData', archieveArray);
       });
-    console.log('unpinNotes', unPinNoteData);
   };
 
   const storeData = async (title, note, isUpDate, key, pin, archieve) => {
@@ -81,6 +87,7 @@ const useFetchNotes = () => {
     storeData,
     deleteNotes,
     setUnPinNoteData,
+    archieveData,
   };
 };
 
