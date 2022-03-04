@@ -4,9 +4,9 @@ import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {Drawer, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
-import SignOut from '../../screens/SignOut';
+import SignOut from '../screens/SignOut';
 
-const DrawerContent = props => {
+const DrawerContents = props => {
   const navigation = useNavigation();
   const {handleSignOut} = SignOut();
   // console.log(props);
@@ -88,7 +88,7 @@ const DrawerContent = props => {
   );
 };
 
-export default DrawerContent;
+export default DrawerContents;
 
 const Styles = StyleSheet.create({
   text: {

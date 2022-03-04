@@ -13,40 +13,58 @@ import {useRoute} from '@react-navigation/native';
 
 const NewNotes = ({navigation}) => {
   const noteData = useRoute().params;
-  // const route = useRoute();
-  console.log('Note Data', noteData);
 
   const {storeData} = useFetchNotes();
   const [title, setTitle] = useState(noteData?.title || '');
   const [note, setNote] = useState(noteData?.note || '');
-  const [isUpDate, setIsUpDate] = useState(noteData?.isUpDate || '');
-  const [key, setKey] = useState(noteData?.key || '');
+  const [isUpDate, setIsUpDate] = useState(noteData?.isUpDate || false);
+  const [pin, setPin] = useState(noteData?.pin || false);
+  const [archieve, setArchieve] = useState(noteData?.archieve || false);
+
+  const [key] = useState(noteData?.key || '');
 
   return (
     <View>
       <View style={Styles.header}>
         <TouchableOpacity
           onPress={() => {
-            storeData(title, isUpDate, key);
-            navigation.goBack();
+            storeData(title, note, isUpDate, key, pin, archieve);
           }}>
           <AntDesign name="arrowleft" size={25} color={'black'} />
         </TouchableOpacity>
 
         <View style={Styles.view}>
-          <AntDesign
-            style={Styles.icon}
-            name="pushpino"
-            size={25}
-            color={'black'}
-          />
-          <AntDesign
-            style={Styles.icon}
-            name="bells"
-            size={25}
-            color={'black'}
-          />
-          <Icon style={Styles.icon} name="archive" size={25} color={'black'} />
+          <TouchableOpacity
+            onPress={() => {
+              // OnPinPressed();
+              setPin(!pin);
+            }}>
+            <AntDesign
+              style={Styles.icon}
+              name={pin ? 'pushpin' : 'pushpino'}
+              size={25}
+              color={'black'}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
+            <AntDesign
+              style={Styles.icon}
+              name="bells"
+              size={25}
+              color={'black'}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setArchieve(!archieve);
+            }}>
+            <Icon
+              style={Styles.icon}
+              name={archieve ? 'archive' : 'archive-outline'}
+              size={25}
+              color={'black'}
+            />
+          </TouchableOpacity>
         </View>
       </View>
 
