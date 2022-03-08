@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import useFetchNotes from '../Services/data/FetchNotes';
 import {useRoute} from '@react-navigation/native';
 
-const NewNotes = ({navigation}) => {
+const NewNotes = () => {
   const noteData = useRoute().params;
 
   const {storeData} = useFetchNotes();
@@ -20,6 +20,7 @@ const NewNotes = ({navigation}) => {
   const [isUpDate, setIsUpDate] = useState(noteData?.isUpDate || false);
   const [pin, setPin] = useState(noteData?.pin || false);
   const [archieve, setArchieve] = useState(noteData?.archieve || false);
+  const [trash, setTrash] = useState(noteData?.delete || false);
 
   const [key] = useState(noteData?.key || '');
 
@@ -28,7 +29,7 @@ const NewNotes = ({navigation}) => {
       <View style={Styles.header}>
         <TouchableOpacity
           onPress={() => {
-            storeData(title, note, isUpDate, key, pin, archieve);
+            storeData(title, note, isUpDate, key, pin, archieve, trash);
           }}>
           <AntDesign name="arrowleft" size={25} color={'black'} />
         </TouchableOpacity>
@@ -61,6 +62,17 @@ const NewNotes = ({navigation}) => {
             <Icon
               style={Styles.icon}
               name={archieve ? 'archive' : 'archive-outline'}
+              size={25}
+              color={'black'}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setTrash(!trash);
+            }}>
+            <Icon
+              style={Styles.icon}
+              name={trash ? 'trash' : 'trash-outline'}
               size={25}
               color={'black'}
             />

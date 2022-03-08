@@ -1,24 +1,31 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native';
 import {Avatar} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Entypo';
+import Icons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import useImagePicker from './ImagePicker';
 import SignOut from '../screens/SignOut';
 import {useNavigation} from '@react-navigation/native';
+import useFetchNotes from '../Services/data/FetchNotes';
 
-const Header = () => {
+const Header = ({headerState, noteData, pinNoteData}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modal, setModal] = useState(false);
+  const [trash, setTrash] = useState(false);
   const {openCamera, openGalary, imageUri, userName, email} = useImagePicker();
-
   const {handleSignOut} = SignOut();
+  const {updateDeleteData, deleteData, fetchNoteData} = useFetchNotes();
+
+  // console.log('data', headerState.cardsdata);
+  console.log('header note data', noteData);
 
   const onPressHandler = () => {
     setModalVisible(true);
   };
 
-  return true ? (
+  return headerState.header ? (
     <>
       <View style={Styles.container}>
         <View style={{flexDirection: 'row'}}>
@@ -29,13 +36,16 @@ const Header = () => {
             }}>
             <Icon name="menu" color={'black'} size={30} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('SearchNotes', {...pinNoteData});
+            }}>
             <Text style={Styles.text}>SearchNotes</Text>
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity style={{marginRight: 10}}>
-            <Icon name="ios-grid-outline" color={'black'} size={30} />
+            <Icons name="ios-grid-outline" color={'black'} size={30} />
           </TouchableOpacity>
           <TouchableOpacity onPress={onPressHandler}>
             {imageUri ? (
@@ -110,35 +120,48 @@ const Header = () => {
   ) : (
     <>
       <View style={Styles.falseContainer}>
-        <View style={Styles.modalView}>
+        <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => {
-              setModalVisible(false);
+              updateDeleteData(headerState.cardsdata[0], trash);
+              fetchNoteData();
+              headerState.setHeader(true);
             }}>
-            <Icon style={Styles.icon} name="cross" size={35} color={'black'} />
+            <Icon style={Styles.icon} name="cross" size={40} color={'black'} />
           </TouchableOpacity>
-          <View style={Styles.viewIcons}>
-            <TouchableOpacity
-              onPress={() => {
-                // OnPinPressed();
-              }}>
-              <AntDesign
-                style={Styles.icon}
-                name={pin ? 'pushpin' : 'pushpino'}
-                size={25}
-                color={'black'}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}}>
-              <AntDesign
-                style={Styles.icon}
-                name="bells"
-                size={25}
-                color={'black'}
-              />
-            </TouchableOpacity>
-            <ThreeDotsModal item={item} />
-          </View>
+        </View>
+
+        <View style={Styles.viewIcons}>
+          <TouchableOpacity
+            onPress={() => {
+              // OnPinPressed();
+            }}>
+            <AntDesign
+              style={Styles.icon}
+              name={true ? 'pushpin' : 'pushpino'}
+              size={25}
+              color={'black'}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
+            <AntDesign
+              style={Styles.icon}
+              name="bells"
+              size={25}
+              color={'black'}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setTrash(!trash);
+            }}>
+            <Icons
+              style={Styles.icon}
+              name={trash ? 'trash' : 'trash-outline'}
+              size={25}
+              color={'black'}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </>
@@ -153,7 +176,7 @@ const Styles = StyleSheet.create({
     borderRadius: 25,
     margin: '2%',
     alignSelf: 'center',
-    // padding: '2%',
+    padding: '2%',
     flexDirection: 'row',
     paddingHorizontal: '4%',
     justifyContent: 'space-between',
@@ -192,8 +215,16 @@ const Styles = StyleSheet.create({
     color: 'black',
   },
   falseContainer: {
-    // borderWidth: 1,
-    // borderRadius: 25,
     height: '7%',
+    flexDirection: 'row',
+    margin: '2.5%',
+    justifyContent: 'space-between',
+  },
+  viewIcons: {
+    flexDirection: 'row',
+    marginRight: '2%',
+  },
+  icon: {
+    margin: 5,
   },
 });

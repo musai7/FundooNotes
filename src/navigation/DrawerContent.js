@@ -60,7 +60,9 @@ const DrawerContents = props => {
           )}
           label="Delete"
           labelStyle={{fontSize: 15}}
-          onPress={() => {}}
+          onPress={() => {
+            navigation.navigate('Delete');
+          }}
         />
         <DrawerItem
           icon={({color, size}) => (

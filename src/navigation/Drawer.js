@@ -5,6 +5,7 @@ import Remainder from '../screens/RemainderScreen';
 import Settings from '../screens/SettingScreen';
 import DrawerContents from '../navigation/DrawerContent';
 import Archieve from '../screens/ArchiveScreen';
+import Delete from '../screens/DeleteScreen';
 
 const Drawar = createDrawerNavigator();
 
@@ -17,6 +18,7 @@ const MyDrawer = () => {
       <Drawar.Screen name="Remainder" component={Remainder} />
       <Drawar.Screen name="Settings" component={Settings} />
       <Drawar.Screen name="Archieve" component={Archieve} />
+      <Drawar.Screen name="Delete" component={Delete} />
     </Drawar.Navigator>
   );
 };

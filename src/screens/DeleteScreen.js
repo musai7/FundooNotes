@@ -4,10 +4,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import useFetchNotes from '../Services/data/FetchNotes';
 
-const Archieve = () => {
+const Delete = () => {
   const navigation = useNavigation();
-  const {archieveData, fetchNoteData} = useFetchNotes();
-  console.log('Archieve Screen', archieveData);
+  const {deleteData, fetchNoteData} = useFetchNotes();
+  console.log('deleteData', deleteData);
   const [isUpDate, setIsUpdate] = useState(true);
 
   let pinNoteData = [];
@@ -42,7 +42,7 @@ const Archieve = () => {
               <Icon name="menu" color={'black'} size={30} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {}}>
-              <Text style={Styles.text}>Archieve</Text>
+              <Text style={Styles.text}>Delete</Text>
             </TouchableOpacity>
           </View>
           <View
@@ -59,9 +59,9 @@ const Archieve = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {archieveData.length > 0 ? (
+        {deleteData.length > 0 ? (
           <FlatList
-            data={archieveData}
+            data={deleteData}
             // numColumns={2}
             keyExtractor={item => item.key}
             renderItem={({item}) => (
@@ -81,14 +81,14 @@ const Archieve = () => {
             )}
           />
         ) : (
-          <View style={Styles.ArchieveView}>
+          <View style={Styles.deleteView}>
             <Icon
               style={Styles.icon}
-              name={'archive-outline'}
+              name={'trash-outline'}
               size={70}
               color={'black'}
             />
-            <Text style={Styles.text}>Archieve Notes will </Text>
+            <Text style={Styles.text}>Delete Notes will </Text>
             <Text style={Styles.text}>Appear Here </Text>
           </View>
         )}
@@ -97,7 +97,7 @@ const Archieve = () => {
   );
 };
 
-export default Archieve;
+export default Delete;
 
 const Styles = StyleSheet.create({
   container: {
@@ -107,7 +107,7 @@ const Styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
   },
-  ArchieveView: {
+  deleteView: {
     alignSelf: 'center',
     marginTop: '70%',
     alignItems: 'center',

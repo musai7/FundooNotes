@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, FlatList, ScrollView} from 'react-native';
 import Header from '../components/Header';
 import BottomBar from '../components/BottomBar';
@@ -8,7 +8,19 @@ import useFetchNotes from '../Services/data/FetchNotes';
 const HomeScreen = ({navigation}) => {
   const {pinNoteData, unPinNoteData, fetchNoteData, setUnPinNoteData} =
     useFetchNotes();
-
+  const [header, setHeader] = useState(true);
+  const [cardsdata, setCardData] = useState([]);
+  headerState = {
+    header,
+    setHeader,
+    cardsdata,
+    setCardData,
+    pinNoteData,
+    unPinNoteData,
+  };
+  let noteData = [{...pinNoteData, ...unPinNoteData}];
+  console.log('pimData', pinNoteData);
+  console.log('noteData home', noteData);
   useEffect(() => {
     const unsibscribe = navigation.addListener('focus', () => fetchNoteData());
     return unsibscribe;
@@ -16,7 +28,12 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={Styles.container}>
-      <Header navigation={navigation} />
+      <Header
+        headerState={headerState}
+        noteData={noteData}
+        navigation={navigation}
+        pinNoteData={pinNoteData}
+      />
       {/* <View style={{flex: 1}}> */}
       <ScrollView style={{flex: 1}}>
         {pinNoteData.length > 0 ? (
@@ -28,7 +45,9 @@ const HomeScreen = ({navigation}) => {
             data={pinNoteData}
             // numColumns={2}
             keyExtractor={item => item.key}
-            renderItem={({item}) => <Notes item={item} />}
+            renderItem={({item}) => (
+              <Notes headerState={headerState} item={item} />
+            )}
           />
         ) : null}
         {pinNoteData.length > 0 && unPinNoteData.length > 0 ? (
@@ -39,13 +58,10 @@ const HomeScreen = ({navigation}) => {
           <FlatList
             data={unPinNoteData}
             // numColumns={2}
+
             keyExtractor={item => item.key}
             renderItem={({item}) => (
-              <Notes
-                unPinNoteData={unPinNoteData}
-                setUnPinNoteData={setUnPinNoteData}
-                item={item}
-              />
+              <Notes headerState={headerState} item={item} />
             )}
           />
         ) : null}
@@ -81,5 +97,6 @@ const Styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     marginLeft: '5%',
+    marginBottom: '1%',
   },
 });

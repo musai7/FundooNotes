@@ -1,5 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {useContext, useState} from 'react';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import {AuthContext} from '../../navigation/AuthContext';
 import {useNavigation} from '@react-navigation/native';
@@ -11,6 +10,8 @@ const useFetchNotes = () => {
   const [pinNoteData, setPinNoteData] = useState([]);
   const [unPinNoteData, setUnPinNoteData] = useState([]);
   const [archieveData, setArchieve] = useState([]);
+  const [deleteData, setDeleteData] = useState([]);
+  const [noteData, setNoteData] = useState([]);
 
   const response = firebase.firestore().collection('userNotes');
 
@@ -18,6 +19,8 @@ const useFetchNotes = () => {
     let pinNotesArray = [];
     let unPinNotesArray = [];
     let archieveArray = [];
+    let deleteArray = [];
+    let noteDataArray = [];
     await firestore()
       .collection('userNotes')
       .doc(token)
@@ -27,23 +30,45 @@ const useFetchNotes = () => {
         notes.forEach(note => {
           const data = note.data();
           data.key = note.id;
-          if (data.pin) {
+          if (data.pin && !data.archieve && !data.delete) {
             pinNotesArray.push(data);
-          } else {
+          } else if (!data.pin && !data.archieve && !data.delete) {
             unPinNotesArray.push(data);
           }
           if (data.archieve) {
+            data.pin = false;
             archieveArray.push(data);
+          } else if (data.delete) {
+            deleteArray.push(data);
+          }
+          if (!data.archieve && !data.delete) {
+            noteDataArray.push(data);
           }
         });
         setPinNoteData(pinNotesArray);
         setUnPinNoteData(unPinNotesArray);
         setArchieve(archieveArray);
-        console.log('archieveData', archieveArray);
+        setDeleteData(deleteArray);
+        setNoteData(noteDataArray);
       });
   };
 
-  const storeData = async (title, note, isUpDate, key, pin, archieve) => {
+  const updateDeleteData = async (key, trash) => {
+    await response.doc(token).collection('notes').doc(key).update({
+      delete: trash,
+    });
+    console.log('trash fetch', trash);
+  };
+
+  const storeData = async (
+    title,
+    note,
+    isUpDate,
+    key,
+    pin,
+    archieve,
+    trash,
+  ) => {
     if (isUpDate) {
       console.log('notes updated');
 
@@ -53,7 +78,7 @@ const useFetchNotes = () => {
           note: note,
           pin: pin,
           archieve: archieve,
-          delete: false,
+          delete: trash,
         });
       }
       navigation.goBack();
@@ -88,6 +113,9 @@ const useFetchNotes = () => {
     deleteNotes,
     setUnPinNoteData,
     archieveData,
+    deleteData,
+    updateDeleteData,
+    noteData,
   };
 };
 
