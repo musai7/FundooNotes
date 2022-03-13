@@ -25,11 +25,11 @@ const ThreeDotsModal = ({item, setUnPinNoteData, unPinNoteData}) => {
         <Icon
           style={Styles.icon}
           name="dots-three-vertical"
-          size={25}
+          size={23}
           color={'black'}
         />
       </TouchableOpacity>
-      <Modal
+      {/* <Modal
         transparent={true}
         animationType="slide"
         visible={modalVisible}
@@ -43,7 +43,7 @@ const ThreeDotsModal = ({item, setUnPinNoteData, unPinNoteData}) => {
         <TouchableOpacity onPress={OnDelete}>
           <Text style={Styles.text}>Delete</Text>
         </TouchableOpacity>
-      </Modal>
+      </Modal> */}
     </View>
   );
 };
@@ -60,8 +60,8 @@ const Styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   icon: {
-    margin: 10,
-    paddingTop: 10,
+    // margin: 10,
+    // paddingTop: 10,
   },
   text: {
     color: 'black',

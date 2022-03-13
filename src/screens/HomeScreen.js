@@ -10,6 +10,9 @@ const HomeScreen = ({navigation}) => {
     useFetchNotes();
   const [header, setHeader] = useState(true);
   const [cardsdata, setCardData] = useState([]);
+  // const [noOfColumns, setNoOfColumns] = useState(1);
+  // const [grid, setGrid] = useState(false);
+
   headerState = {
     header,
     setHeader,
@@ -34,7 +37,6 @@ const HomeScreen = ({navigation}) => {
         navigation={navigation}
         pinNoteData={pinNoteData}
       />
-      {/* <View style={{flex: 1}}> */}
       <ScrollView style={{flex: 1}}>
         {pinNoteData.length > 0 ? (
           <Text style={Styles.pinnedText}>Pinned</Text>
@@ -43,7 +45,8 @@ const HomeScreen = ({navigation}) => {
         {pinNoteData ? (
           <FlatList
             data={pinNoteData}
-            // numColumns={2}
+            // numColumns={1}
+            // key={1}
             keyExtractor={item => item.key}
             renderItem={({item}) => (
               <Notes headerState={headerState} item={item} />
@@ -57,8 +60,8 @@ const HomeScreen = ({navigation}) => {
         {unPinNoteData ? (
           <FlatList
             data={unPinNoteData}
-            // numColumns={2}
-
+            // numColumns={1}
+            // key={1}
             keyExtractor={item => item.key}
             renderItem={({item}) => (
               <Notes headerState={headerState} item={item} />
@@ -72,7 +75,6 @@ const HomeScreen = ({navigation}) => {
           </View>
         ) : null}
       </ScrollView>
-      {/* </View> */}
       <View>
         <BottomBar navigation={navigation} />
       </View>

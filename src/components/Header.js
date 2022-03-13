@@ -14,6 +14,7 @@ const Header = ({headerState, noteData, pinNoteData}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modal, setModal] = useState(false);
   const [trash, setTrash] = useState(false);
+  const [grid, setGrid] = useState(false);
   const {openCamera, openGalary, imageUri, userName, email} = useImagePicker();
   const {handleSignOut} = SignOut();
   const {updateDeleteData, deleteData, fetchNoteData} = useFetchNotes();
@@ -44,8 +45,16 @@ const Header = ({headerState, noteData, pinNoteData}) => {
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity style={{marginRight: 10}}>
-            <Icons name="ios-grid-outline" color={'black'} size={30} />
+          <TouchableOpacity
+            style={{marginRight: 10}}
+            onPress={() => {
+              setGrid(!grid);
+            }}>
+            <Icons
+              name={grid ? 'grid' : 'ios-grid-outline'}
+              color={'black'}
+              size={30}
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={onPressHandler}>
             {imageUri ? (

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-const Notes = ({item, headerState}) => {
+const Notes = ({item, headerState, lableItem}) => {
   const navigation = useNavigation();
   const [isUpDate, setIsUpdate] = useState(true);
   const [pin, setPin] = useState(false);
@@ -25,6 +25,11 @@ const Notes = ({item, headerState}) => {
       <TouchableOpacity onPress={onPressUpdate} onLongPress={OnHandleLongPress}>
         <Text style={Styles.titleText}> {item?.title}</Text>
         <Text style={Styles.notesText}>{item?.note}</Text>
+        {lableItem?.labelName ? (
+          <View>
+            <Text style={{color: 'black'}}>{lableItem?.labelName || ''}</Text>
+          </View>
+        ) : null}
       </TouchableOpacity>
     </View>
   ) : null;
@@ -39,6 +44,7 @@ const Styles = StyleSheet.create({
     padding: '2%',
     borderWidth: 2,
     borderRadius: 10,
+    // width: '40%',
   },
   titleText: {
     color: 'black',
