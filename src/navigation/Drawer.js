@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import HomeScreen from '../screens/HomeScreen';
 import Remainder from '../screens/RemainderScreen';
@@ -8,7 +8,6 @@ import Archieve from '../screens/ArchiveScreen';
 import Delete from '../screens/DeleteScreen';
 import Labels from '../screens/labels/Labels';
 import EditLabels from '../screens/labels/EditLabels';
-import LabelsFireBase from '../Services/data/LabelsFireBase';
 
 const Drawar = createDrawerNavigator();
 

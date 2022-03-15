@@ -2,8 +2,11 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 const DrawerLabelCards = ({item, navigation}) => {
+  const onPressHandler = () => {
+    navigation.navigate('Labels', {...item});
+  };
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Labels', {...item})}>
+    <TouchableOpacity onPress={onPressHandler}>
       <View style={{flexDirection: 'row', margin: '3.5%'}}>
         <Icons
           style={Styles.icon}

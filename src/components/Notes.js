@@ -7,6 +7,8 @@ const Notes = ({item, headerState, lableItem}) => {
   const [isUpDate, setIsUpdate] = useState(true);
   const [pin, setPin] = useState(false);
 
+  console.log('item', item);
+
   let cardsArray = [];
 
   const onPressUpdate = () => {
@@ -21,7 +23,7 @@ const Notes = ({item, headerState, lableItem}) => {
     headerState.setCardData(cardsArray);
   };
   return item ? (
-    <View style={Styles.view}>
+    <View style={[Styles.view, headerState?.grid ? {width: '40%'} : null]}>
       <TouchableOpacity onPress={onPressUpdate} onLongPress={OnHandleLongPress}>
         <Text style={Styles.titleText}> {item?.title}</Text>
         <Text style={Styles.notesText}>{item?.note}</Text>
@@ -44,7 +46,7 @@ const Styles = StyleSheet.create({
     padding: '2%',
     borderWidth: 2,
     borderRadius: 10,
-    // width: '40%',
+    // flexWrap: 'wrap',
   },
   titleText: {
     color: 'black',

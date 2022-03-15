@@ -16,6 +16,7 @@ import NewAudioNote from '../screens/NewAudioNote';
 import NewDrawingNote from '../screens/NewDrawingNote';
 import NewNotes from '../screens/NewNotes';
 import SearchNotes from '../screens/SearchNotes';
+import LabelsList from '../screens/labels/LabelsList';
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
@@ -39,6 +40,7 @@ const Navigator = () => {
                 <Stack.Screen name="NewPhotoNote" component={NewPhotoNote} />
                 <Stack.Screen name="NewNotes" component={NewNotes} />
                 <Stack.Screen name="SearchNotes" component={SearchNotes} />
+                <Stack.Screen name="LabelsList" component={LabelsList} />
               </>
             ) : (
               <>

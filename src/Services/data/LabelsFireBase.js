@@ -1,10 +1,13 @@
 import {useContext, useState} from 'react';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import {AuthContext} from '../../navigation/AuthContext';
+import {fetchLabels} from '../../redux/actions';
+import {useSelector, useDispatch} from 'react-redux';
 
 const LabelsFireBase = () => {
   const {token} = useContext(AuthContext);
   const [labelData, setLabelData] = useState([]);
+  const dispatch = useDispatch();
 
   const response = firebase.firestore().collection('LabelsNotes');
 
@@ -23,23 +26,19 @@ const LabelsFireBase = () => {
 
   const FetchLabelData = async () => {
     let labelArray = [];
-    await firestore()
+    let responce = await firestore()
       .collection('LabelsNotes')
       .doc(token)
       .collection('labels')
-      .get()
-      .then(labels => {
-        console.log('labels', labels);
-        labels.forEach(label => {
-          console.log('label......', label);
-
-          const data = label.data();
-          data.key = label.id;
-          labelArray.push(data);
-        });
-      });
+      .get();
+    responce.forEach(doc => {
+      const data = doc.data();
+      data.key = doc.id;
+      labelArray.push(data);
+    });
     setLabelData(labelArray);
-    console.log('label Array', labelArray);
+    dispatch(fetchLabels(labelArray));
+    return labelArray;
   };
 
   const updateLabelData = async (key, labelName) => {

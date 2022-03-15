@@ -7,18 +7,16 @@ import {useNavigation} from '@react-navigation/native';
 import SignOut from '../screens/SignOut';
 import DrawerLabelCards from '../screens/labels/DrawerLabelCards';
 import LabelsFireBase from '../Services/data/LabelsFireBase';
+import {useSelector} from 'react-redux';
 
 const DrawerContents = ({props}) => {
   const navigation = useNavigation();
   const {handleSignOut} = SignOut();
-
-  const {FetchLabelData, labelData} = LabelsFireBase();
-
-  console.log('Drawer content', labelData);
+  const {labelData} = useSelector(state => state.userReducer);
+  const {FetchLabelData} = LabelsFireBase();
 
   useEffect(() => {
     FetchLabelData();
-    console.log('Drawer content use Effect', labelData);
   }, []);
 
   return (

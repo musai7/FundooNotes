@@ -1,22 +1,19 @@
-import {SET_USER_NAME, SET_USER_AGE} from './actions';
+import {SET_USER_NAME, FETCH_LABELS} from './actions';
 
 const initialState = {
   name: '',
-  age: 0,
+  labelData: [],
 };
 
 function userReducer(state = initialState, action) {
   switch (action.type) {
     case SET_USER_NAME:
       return {...state, name: action.payload};
-      break;
-    case SET_USER_AGE:
-      return {...state, name: action.payload};
+    case FETCH_LABELS:
+      return {...state, labelData: action.payload};
 
-      break;
     default:
       return state;
-      break;
   }
 }
 

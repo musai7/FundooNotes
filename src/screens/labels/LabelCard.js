@@ -1,22 +1,19 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  FlatList,
-  StyleSheet,
-} from 'react-native';
+import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LabelsFireBase from '../../Services/data/LabelsFireBase';
+import {useDispatch} from 'react-redux';
+import {fetchLabels} from '../../redux/actions';
+
 const LabelCards = ({item, navigation}) => {
   const [value, setValue] = useState(item.labelName);
   const [iconVisibility, setIconVisiility] = useState(false);
-  const {updateLabelData} = LabelsFireBase();
+  const {updateLabelData, FetchLabelData} = LabelsFireBase();
+
+  // const dispatch = useDispatch();
 
   const OnPressHandler = () => {
-    updateLabelData(item.key, value);
     setIconVisiility(false);
   };
 
@@ -42,7 +39,9 @@ const LabelCards = ({item, navigation}) => {
         }}
         onBlur={() => {
           setIconVisiility(false);
-          //   updateLabelData(item.key, value);
+          updateLabelData(item.key, value);
+          // dispatch(fetchLabels());
+          FetchLabelData();
         }}
         onPressIn={() => {
           setIconVisiility(true);

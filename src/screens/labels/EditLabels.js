@@ -12,14 +12,15 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import LabelCards from './LabelCard';
 import LabelsFireBase from '../../Services/data/LabelsFireBase';
+import {useSelector} from 'react-redux';
 
 const EditLabels = () => {
   const navigation = useNavigation();
   const [labelName, setLabelName] = useState('');
   const [iconVisibility, setIconVisibility] = useState(false);
-  const {storeLabelsData, FetchLabelData, labelData} = LabelsFireBase();
+  const {storeLabelsData, FetchLabelData} = LabelsFireBase();
 
-  console.log('labeldata..', labelData);
+  const {labelData} = useSelector(state => state.userReducer);
 
   const OnPressHandler = () => {
     storeLabelsData(labelName);

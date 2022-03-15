@@ -9,18 +9,16 @@ import SignOut from '../screens/SignOut';
 import {useNavigation} from '@react-navigation/native';
 import useFetchNotes from '../Services/data/FetchNotes';
 
-const Header = ({headerState, noteData, pinNoteData}) => {
+const Header = ({headerState}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modal, setModal] = useState(false);
   const [trash, setTrash] = useState(false);
-  const [grid, setGrid] = useState(false);
   const {openCamera, openGalary, imageUri, userName, email} = useImagePicker();
   const {handleSignOut} = SignOut();
   const {updateDeleteData, deleteData, fetchNoteData} = useFetchNotes();
 
   // console.log('data', headerState.cardsdata);
-  console.log('header note data', noteData);
 
   const onPressHandler = () => {
     setModalVisible(true);
@@ -39,7 +37,7 @@ const Header = ({headerState, noteData, pinNoteData}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('SearchNotes', {...pinNoteData});
+              navigation.navigate('SearchNotes');
             }}>
             <Text style={Styles.text}>SearchNotes</Text>
           </TouchableOpacity>
@@ -48,10 +46,10 @@ const Header = ({headerState, noteData, pinNoteData}) => {
           <TouchableOpacity
             style={{marginRight: 10}}
             onPress={() => {
-              setGrid(!grid);
+              headerState.setGrid(!headerState.grid);
             }}>
             <Icons
-              name={grid ? 'grid' : 'ios-grid-outline'}
+              name={headerState.grid ? 'grid' : 'ios-grid-outline'}
               color={'black'}
               size={30}
             />

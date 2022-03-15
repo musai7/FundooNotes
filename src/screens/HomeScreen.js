@@ -1,17 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, FlatList, ScrollView} from 'react-native';
+import {Text, View, StyleSheet, FlatList, SectionList} from 'react-native';
 import Header from '../components/Header';
 import BottomBar from '../components/BottomBar';
 import Notes from '../components/Notes';
 import useFetchNotes from '../Services/data/FetchNotes';
 
 const HomeScreen = ({navigation}) => {
-  const {pinNoteData, unPinNoteData, fetchNoteData, setUnPinNoteData} =
-    useFetchNotes();
+  const {pinNoteData, unPinNoteData, fetchNoteData} = useFetchNotes();
   const [header, setHeader] = useState(true);
   const [cardsdata, setCardData] = useState([]);
-  // const [noOfColumns, setNoOfColumns] = useState(1);
-  // const [grid, setGrid] = useState(false);
+  const [grid, setGrid] = useState(false);
+  const numColumns = grid ? 2 : 1;
 
   headerState = {
     header,
@@ -20,52 +19,47 @@ const HomeScreen = ({navigation}) => {
     setCardData,
     pinNoteData,
     unPinNoteData,
+    grid,
+    setGrid,
   };
-  let noteData = [{...pinNoteData, ...unPinNoteData}];
-  console.log('pimData', pinNoteData);
-  console.log('noteData home', noteData);
+
   useEffect(() => {
     const unsibscribe = navigation.addListener('focus', () => fetchNoteData());
     return unsibscribe;
-  }, []);
+  }, [fetchNoteData]);
+
+  const sections = [
+    {title: 'pinned', data: [pinNoteData]},
+    {title: 'others', data: [unPinNoteData]},
+  ];
+
+  console.log('pinNoteData', pinNoteData);
+  const renderItem = item => {
+    return (
+      <FlatList
+        numColumns={numColumns}
+        key={numColumns}
+        data={item.item}
+        keyExtractor={item => item.key}
+        renderItem={({item}) => <Notes headerState={headerState} item={item} />}
+      />
+    );
+  };
 
   return (
     <View style={Styles.container}>
-      <Header
-        headerState={headerState}
-        noteData={noteData}
-        navigation={navigation}
-        pinNoteData={pinNoteData}
-      />
-      <ScrollView style={{flex: 1}}>
-        {pinNoteData.length > 0 ? (
-          <Text style={Styles.pinnedText}>Pinned</Text>
-        ) : null}
-
-        {pinNoteData ? (
-          <FlatList
-            data={pinNoteData}
-            // numColumns={1}
-            // key={1}
-            keyExtractor={item => item.key}
-            renderItem={({item}) => (
-              <Notes headerState={headerState} item={item} />
-            )}
-          />
-        ) : null}
-        {pinNoteData.length > 0 && unPinNoteData.length > 0 ? (
-          <Text style={Styles.pinnedText}>Others</Text>
-        ) : null}
-
-        {unPinNoteData ? (
-          <FlatList
-            data={unPinNoteData}
-            // numColumns={1}
-            // key={1}
-            keyExtractor={item => item.key}
-            renderItem={({item}) => (
-              <Notes headerState={headerState} item={item} />
-            )}
+      <Header headerState={headerState} navigation={navigation} />
+      <View style={{flex: 1}}>
+        {pinNoteData.length > 0 || unPinNoteData.length > 0 ? (
+          <SectionList
+            sections={sections}
+            renderSectionHeader={({section}) =>
+              pinNoteData.length ? (
+                //(console.log('sections', sections[0].data[0][0].pin),
+                <Text style={Styles.pinnedText}>{section.title}</Text>
+              ) : null
+            }
+            renderItem={renderItem}
           />
         ) : null}
 
@@ -74,7 +68,8 @@ const HomeScreen = ({navigation}) => {
             <Text style={Styles.text}>Notes</Text>
           </View>
         ) : null}
-      </ScrollView>
+      </View>
+
       <View>
         <BottomBar navigation={navigation} />
       </View>
@@ -102,3 +97,7 @@ const Styles = StyleSheet.create({
     marginBottom: '1%',
   },
 });
+
+// yarn add uuid
+// npm i uuid
+// https://www.npmjs.com/package/uuid

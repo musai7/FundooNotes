@@ -12,12 +12,13 @@ import Notes from '../../components/Notes';
 const Labels = () => {
   const lableItem = useRoute().params;
   const navigation = useNavigation();
-  const {pinNoteData, fetchNoteData} = useFetchNotes();
 
-  useEffect(() => {
-    const unsibscribe = navigation.addListener('focus', () => fetchNoteData());
-    return unsibscribe;
-  }, []);
+  // const {pinNoteData, fetchNoteData} = useFetchNotes();
+
+  // useEffect(() => {
+  //   const unsibscribe = navigation.addListener('focus', () => fetchNoteData());
+  //   return unsibscribe;
+  // }, []);
 
   return (
     <View style={Styles.container}>
@@ -60,21 +61,8 @@ const Labels = () => {
             <ThreeDotsModal />
           </View>
         </View>
-        {true ? (
-          <FlatList
-            data={pinNoteData}
-            // numColumns={2}
-            keyExtractor={item => item.key}
-            renderItem={({item}) => (
-              <Notes
-                headerState={headerState}
-                item={item}
-                lableItem={lableItem}
-              />
-            )}
-          />
-        ) : (
-          <View style={Styles.ArchieveView}>
+        {
+          <View style={Styles.labelView}>
             <Icons
               style={Styles.icon}
               name={'label-outline'}
@@ -84,7 +72,7 @@ const Labels = () => {
             <Text style={Styles.text}>Label Notes will </Text>
             <Text style={Styles.text}>Appear Here </Text>
           </View>
-        )}
+        }
       </View>
       <View>
         <BottomBar navigation={navigation} />
@@ -103,7 +91,7 @@ const Styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
   },
-  ArchieveView: {
+  labelView: {
     alignSelf: 'center',
     marginTop: '70%',
     alignItems: 'center',
