@@ -30,13 +30,23 @@ const NewNotes = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const [key] = useState(noteData?.key || '');
+  console.log('noteData', noteData);
 
   return (
     <View>
       <View style={Styles.header}>
         <TouchableOpacity
           onPress={() => {
-            storeData(title, note, isUpDate, key, pin, archieve, trash);
+            storeData(
+              title,
+              note,
+              isUpDate,
+              key,
+              pin,
+              archieve,
+              trash,
+              noteData?.selectedLabels,
+            );
           }}>
           <AntDesign name="arrowleft" size={25} color={'black'} />
         </TouchableOpacity>

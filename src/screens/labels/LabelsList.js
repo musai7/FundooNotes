@@ -21,6 +21,7 @@ const LabelsList = () => {
   const [labelVisible, setLabelVisibile] = useState(false);
   const {storeLabelsData, FetchLabelData} = LabelsFireBase();
   const {labelData} = useSelector(state => state.userReducer);
+  const [selectedLabels, setSelectedLabels] = useState([]);
 
   useEffect(() => {
     FetchLabelData();
@@ -44,7 +45,8 @@ const LabelsList = () => {
         }}>
         <TouchableOpacity
           onPress={() => {
-            navigation.goBack();
+            // navigation.goBack({selectedLabels});
+            navigation.navigate('NewNotes', {selectedLabels});
           }}>
           <AntDesign name="arrowleft" size={25} color={'black'} />
         </TouchableOpacity>
@@ -107,7 +109,13 @@ const LabelsList = () => {
         <FlatList
           data={labelData}
           keyExtractor={item => item.key}
-          renderItem={({item}) => <LabelsListCard item={item} />}
+          renderItem={({item}) => (
+            <LabelsListCard
+              item={item}
+              selectedLabels={selectedLabels}
+              setSelectedLabels={setSelectedLabels}
+            />
+          )}
         />
       )}
     </View>

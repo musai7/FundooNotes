@@ -46,7 +46,6 @@ const Styles = StyleSheet.create({
     padding: '2%',
     borderWidth: 2,
     borderRadius: 10,
-    // flexWrap: 'wrap',
   },
   titleText: {
     color: 'black',

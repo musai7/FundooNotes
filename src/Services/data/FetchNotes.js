@@ -68,6 +68,7 @@ const useFetchNotes = () => {
     pin,
     archieve,
     trash,
+    labelData,
   ) => {
     if (isUpDate) {
       console.log('notes updated');
@@ -79,6 +80,7 @@ const useFetchNotes = () => {
           pin: pin,
           archieve: archieve,
           delete: trash,
+          labelData: labelData,
         });
       }
       navigation.goBack();
