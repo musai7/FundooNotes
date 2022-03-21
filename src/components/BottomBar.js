@@ -3,7 +3,7 @@ import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const BottomBar = () => {
+const BottomBar = ({lableItem}) => {
   const navigation = useNavigation();
   const [isUpDate, setIsUpdate] = useState(false);
 
@@ -18,7 +18,7 @@ const BottomBar = () => {
         <TouchableOpacity
           style={{}}
           onPress={() => {
-            navigation.navigate('NewNotes');
+            navigation.navigate('NewNotes', {labelData: lableItem});
           }}>
           <FontAwesome
             isUpDate={isUpDate}

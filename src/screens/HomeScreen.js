@@ -33,7 +33,6 @@ const HomeScreen = ({navigation}) => {
     {title: 'others', data: [unPinNoteData]},
   ];
 
-  console.log('pinNoteData', pinNoteData);
   const renderItem = item => {
     return (
       <FlatList
@@ -55,7 +54,6 @@ const HomeScreen = ({navigation}) => {
             sections={sections}
             renderSectionHeader={({section}) =>
               pinNoteData.length ? (
-                //(console.log('sections', sections[0].data[0][0].pin),
                 <Text style={Styles.pinnedText}>{section.title}</Text>
               ) : null
             }

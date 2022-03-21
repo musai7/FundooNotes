@@ -1,4 +1,11 @@
-import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  SectionList,
+  StyleSheet,
+} from 'react-native';
 import React, {useEffect} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -8,23 +15,63 @@ import ThreeDotsModal from '../../components/ThreeDotsModal';
 import BottomBar from '../../components/BottomBar';
 import useFetchNotes from '../../Services/data/FetchNotes';
 import Notes from '../../components/Notes';
+import {useSelector} from 'react-redux';
 
 const Labels = () => {
   const lableItem = useRoute().params;
+  console.log('lableItem', lableItem);
   const navigation = useNavigation();
+  const {labelData} = useSelector(state => state.userReducer);
+  const {pinNoteData, fetchNoteData, unPinNoteData} = useFetchNotes();
 
-  // const {pinNoteData, fetchNoteData} = useFetchNotes();
+  useEffect(() => {
+    const unsibscribe = navigation.addListener('focus', () => fetchNoteData());
+    return unsibscribe;
+  }, []);
 
-  // useEffect(() => {
-  //   const unsibscribe = navigation.addListener('focus', () => fetchNoteData());
-  //   return unsibscribe;
-  // }, []);
+  let pinnedLableNote = pinNoteData.filter(notes => {
+    console.log('notes', notes);
+    for (let index = 0; index < notes?.labelData?.length; index++) {
+      if (lableItem.key === notes.labelData[index]) {
+        return true;
+      }
+    }
+  });
+
+  let unpinnedLableNote = unPinNoteData.filter(notes => {
+    console.log('notes', notes);
+    for (let index = 0; index < notes?.labelData?.length; index++) {
+      if (lableItem.key === notes.labelData[index]) {
+        return true;
+      }
+    }
+  });
+
+  console.log('pinnedLableNote', pinnedLableNote);
+
+  const sections = [
+    {title: 'pinned', data: [pinnedLableNote]},
+    {title: 'others', data: [unpinnedLableNote]},
+  ];
+
+  const renderItem = item => {
+    return (
+      <FlatList
+        numColumns={1}
+        key={1}
+        data={item.item}
+        keyExtractor={item => item.key}
+        renderItem={({item}) => <Notes headerState={headerState} item={item} />}
+      />
+    );
+  };
 
   return (
     <View style={Styles.container}>
       <View style={{flex: 1}}>
         <View
           style={{
+            marginTop: '2%',
             height: '7%',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -61,7 +108,17 @@ const Labels = () => {
             <ThreeDotsModal />
           </View>
         </View>
-        {
+        {pinnedLableNote.length > 0 || unpinnedLableNote.length > 0 ? (
+          <SectionList
+            sections={sections}
+            renderSectionHeader={({section}) =>
+              pinnedLableNote.length ? (
+                <Text style={Styles.pinnedText}>{section.title}</Text>
+              ) : null
+            }
+            renderItem={renderItem}
+          />
+        ) : (
           <View style={Styles.labelView}>
             <Icons
               style={Styles.icon}
@@ -72,10 +129,10 @@ const Labels = () => {
             <Text style={Styles.text}>Label Notes will </Text>
             <Text style={Styles.text}>Appear Here </Text>
           </View>
-        }
+        )}
       </View>
       <View>
-        <BottomBar navigation={navigation} />
+        <BottomBar lableItem={lableItem} navigation={navigation} />
       </View>
     </View>
   );
@@ -114,5 +171,11 @@ const Styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     // width: '40%',
+  },
+  pinnedText: {
+    color: 'black',
+    fontWeight: 'bold',
+    marginLeft: '5%',
+    marginBottom: '1%',
   },
 });

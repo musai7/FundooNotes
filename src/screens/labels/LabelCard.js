@@ -3,24 +3,27 @@ import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LabelsFireBase from '../../Services/data/LabelsFireBase';
-import {useDispatch} from 'react-redux';
-import {fetchLabels} from '../../redux/actions';
 
 const LabelCards = ({item, navigation}) => {
   const [value, setValue] = useState(item.labelName);
   const [iconVisibility, setIconVisiility] = useState(false);
-  const {updateLabelData, FetchLabelData} = LabelsFireBase();
-
-  // const dispatch = useDispatch();
+  const {updateLabelData, FetchLabelData, deleteLabelData} = LabelsFireBase();
 
   const OnPressHandler = () => {
+    updateLabelData(item.key, value);
+    FetchLabelData();
     setIconVisiility(false);
   };
 
   return (
     <View style={{flexDirection: 'row', alignItems: 'center', borderWidth: 1}}>
       {iconVisibility ? (
-        <TouchableOpacity style={{marginLeft: '3%'}}>
+        <TouchableOpacity
+          style={{marginLeft: '3%'}}
+          onPress={() => {
+            deleteLabelData(item.key);
+            FetchLabelData();
+          }}>
           <Icons name={'delete-outline'} size={25} color={'black'} />
         </TouchableOpacity>
       ) : (
@@ -39,9 +42,8 @@ const LabelCards = ({item, navigation}) => {
         }}
         onBlur={() => {
           setIconVisiility(false);
-          updateLabelData(item.key, value);
-          // dispatch(fetchLabels());
-          FetchLabelData();
+          // updateLabelData(item.key, value);
+          // FetchLabelData();
         }}
         onPressIn={() => {
           setIconVisiility(true);

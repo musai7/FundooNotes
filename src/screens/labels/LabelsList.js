@@ -13,6 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import LabelsFireBase from '../../Services/data/LabelsFireBase';
 import LabelsListCard from './labelsListCard';
+import {useRoute} from '@react-navigation/native';
 
 const LabelsList = () => {
   const navigation = useNavigation();
@@ -21,7 +22,12 @@ const LabelsList = () => {
   const [labelVisible, setLabelVisibile] = useState(false);
   const {storeLabelsData, FetchLabelData} = LabelsFireBase();
   const {labelData} = useSelector(state => state.userReducer);
-  const [selectedLabels, setSelectedLabels] = useState([]);
+
+  const lableId = useRoute().params.lablelIds;
+  const [selectedLabels, setSelectedLabels] = useState(lableId ?? []);
+
+  console.log('labelData', labelData);
+  console.log('lableId list', lableId);
 
   useEffect(() => {
     FetchLabelData();
@@ -35,6 +41,8 @@ const LabelsList = () => {
     setFilterLabelData(filterLabel);
   };
 
+  console.log('selectedLabels', selectedLabels);
+
   return (
     <View>
       <View
@@ -45,8 +53,9 @@ const LabelsList = () => {
         }}>
         <TouchableOpacity
           onPress={() => {
-            // navigation.goBack({selectedLabels});
-            navigation.navigate('NewNotes', {selectedLabels});
+            navigation.navigate('NewNotes', {
+              labelData: selectedLabels,
+            });
           }}>
           <AntDesign name="arrowleft" size={25} color={'black'} />
         </TouchableOpacity>
@@ -73,7 +82,9 @@ const LabelsList = () => {
           <FlatList
             data={filterLabelData}
             keyExtractor={item => item.key}
-            renderItem={({item}) => <LabelsListCard item={item} />}
+            renderItem={({item}) => (
+              <LabelsListCard item={item} isCheckBox={true} />
+            )}
           />
         ) : (
           <TouchableOpacity
@@ -114,6 +125,7 @@ const LabelsList = () => {
               item={item}
               selectedLabels={selectedLabels}
               setSelectedLabels={setSelectedLabels}
+              lableId={lableId}
             />
           )}
         />

@@ -1,15 +1,21 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import Chip from './Chip';
 
-const Notes = ({item, headerState, lableItem}) => {
+const Notes = ({item, headerState}) => {
   const navigation = useNavigation();
   const [isUpDate, setIsUpdate] = useState(true);
-  const [pin, setPin] = useState(false);
+  const {labelData} = useSelector(state => state.userReducer);
 
-  console.log('item', item);
-
-  let cardsArray = [];
+  let chipData = labelData.filter(labels => {
+    for (let index = 0; index < item?.labelData?.length; index++) {
+      if (labels.key === item.labelData[index]) {
+        return true;
+      }
+    }
+  });
 
   const onPressUpdate = () => {
     if (headerState.header) {
@@ -23,17 +29,15 @@ const Notes = ({item, headerState, lableItem}) => {
     headerState.setCardData(cardsArray);
   };
   return item ? (
-    <View style={[Styles.view, headerState?.grid ? {width: '40%'} : null]}>
-      <TouchableOpacity onPress={onPressUpdate} onLongPress={OnHandleLongPress}>
-        <Text style={Styles.titleText}> {item?.title}</Text>
-        <Text style={Styles.notesText}>{item?.note}</Text>
-        {lableItem?.labelName ? (
-          <View>
-            <Text style={{color: 'black'}}>{lableItem?.labelName || ''}</Text>
-          </View>
-        ) : null}
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      style={[Styles.view, headerState?.grid ? {width: '40%'} : null]}
+      onPress={onPressUpdate}>
+      {item.title ? <Text style={Styles.titleText}>{item?.title}</Text> : null}
+      {item.note ? <Text style={Styles.notesText}>{item?.note}</Text> : null}
+      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        <Chip chipData={chipData} />
+      </View>
+    </TouchableOpacity>
   ) : null;
 };
 export default Notes;
@@ -44,7 +48,7 @@ const Styles = StyleSheet.create({
     marginRight: '5%',
     marginBottom: '2%',
     padding: '2%',
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 10,
   },
   titleText: {

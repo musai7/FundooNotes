@@ -1,23 +1,28 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-const DrawerLabelCards = ({item, navigation}) => {
-  const onPressHandler = () => {
-    navigation.navigate('Labels', {...item});
-  };
-  return (
-    <TouchableOpacity onPress={onPressHandler}>
-      <View style={{flexDirection: 'row', margin: '3.5%'}}>
-        <Icons
-          style={Styles.icon}
-          name={'label-outline'}
-          size={25}
-          color={'black'}
-        />
-        <Text style={Styles.text}>{item.labelName}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+const DrawerLabelCards = ({navigation, labelData}) => {
+  let LableArray = [];
+  for (let index = 0; index < labelData.length; index++) {
+    LableArray.push(
+      <TouchableOpacity
+        key={labelData[index].labelName}
+        onPress={() => {
+          navigation.navigate('Labels', {...labelData[index]});
+        }}>
+        <View style={{flexDirection: 'row', margin: '3.5%'}}>
+          <Icons
+            style={Styles.icon}
+            name={'label-outline'}
+            size={25}
+            color={'black'}
+          />
+          <Text style={{color: 'black'}}>{labelData[index].labelName}</Text>
+        </View>
+      </TouchableOpacity>,
+    );
+  }
+  return LableArray;
 };
 
 export default DrawerLabelCards;

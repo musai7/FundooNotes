@@ -21,36 +21,34 @@ const useFetchNotes = () => {
     let archieveArray = [];
     let deleteArray = [];
     let noteDataArray = [];
-    await firestore()
+    let responce = await firestore()
       .collection('userNotes')
       .doc(token)
       .collection('notes')
-      .get()
-      .then(notes => {
-        notes.forEach(note => {
-          const data = note.data();
-          data.key = note.id;
-          if (data.pin && !data.archieve && !data.delete) {
-            pinNotesArray.push(data);
-          } else if (!data.pin && !data.archieve && !data.delete) {
-            unPinNotesArray.push(data);
-          }
-          if (data.archieve) {
-            data.pin = false;
-            archieveArray.push(data);
-          } else if (data.delete) {
-            deleteArray.push(data);
-          }
-          if (!data.archieve && !data.delete) {
-            noteDataArray.push(data);
-          }
-        });
-        setPinNoteData(pinNotesArray);
-        setUnPinNoteData(unPinNotesArray);
-        setArchieve(archieveArray);
-        setDeleteData(deleteArray);
-        setNoteData(noteDataArray);
-      });
+      .get();
+    responce.forEach(note => {
+      const data = note.data();
+      data.key = note.id;
+      if (data.pin && !data.archieve && !data.delete) {
+        pinNotesArray.push(data);
+      } else if (!data.pin && !data.archieve && !data.delete) {
+        unPinNotesArray.push(data);
+      }
+      if (data.archieve) {
+        data.pin = false;
+        archieveArray.push(data);
+      } else if (data.delete) {
+        deleteArray.push(data);
+      }
+      if (!data.archieve && !data.delete) {
+        noteDataArray.push(data);
+      }
+    });
+    setPinNoteData(pinNotesArray);
+    setUnPinNoteData(unPinNotesArray);
+    setArchieve(archieveArray);
+    setDeleteData(deleteArray);
+    setNoteData(noteDataArray);
   };
 
   const updateDeleteData = async (key, trash) => {
@@ -71,8 +69,6 @@ const useFetchNotes = () => {
     labelData,
   ) => {
     if (isUpDate) {
-      console.log('notes updated');
-
       if (note.length !== 0 || title.length !== 0) {
         await response.doc(token).collection('notes').doc(key).update({
           title: title,
@@ -82,19 +78,24 @@ const useFetchNotes = () => {
           delete: trash,
           labelData: labelData,
         });
+        console.log('notes updated');
       }
       navigation.goBack();
     } else {
-      console.log('notes added');
       try {
         if (note.length !== 0 || title.length !== 0) {
-          await response.doc(token).collection('notes').add({
-            title: title,
-            note: note,
-            pin: pin,
-            archieve: archieve,
-            delete: false,
-          });
+          await response
+            .doc(token)
+            .collection('notes')
+            .add({
+              title: title,
+              note: note,
+              pin: pin,
+              archieve: archieve,
+              delete: false,
+              labelData: labelData || [],
+            });
+          console.log('notes added');
         }
       } catch (error) {
         console.log(error);

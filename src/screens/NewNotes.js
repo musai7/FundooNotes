@@ -1,10 +1,11 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Modal,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -14,9 +15,12 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import useFetchNotes from '../Services/data/FetchNotes';
 import {useRoute} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import Chip from '../components/Chip';
 
 const NewNotes = () => {
   const noteData = useRoute().params;
+  console.log('noteData', noteData);
   const navigation = useNavigation();
 
   const {storeData} = useFetchNotes();
@@ -28,12 +32,21 @@ const NewNotes = () => {
   const [trash, setTrash] = useState(noteData?.delete || false);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const {labelData} = useSelector(state => state.userReducer);
+  console.log('labelData', labelData);
 
   const [key] = useState(noteData?.key || '');
-  console.log('noteData', noteData);
 
+  let chipData = labelData.filter(labels => {
+    for (let index = 0; index < noteData?.labelData?.length; index++) {
+      if (labels.key === noteData?.labelData[index]) {
+        return true;
+      }
+    }
+  });
+  console.log('chipdata', chipData);
   return (
-    <View>
+    <View style={{flex: 1}}>
       <View style={Styles.header}>
         <TouchableOpacity
           onPress={() => {
@@ -45,7 +58,7 @@ const NewNotes = () => {
               pin,
               archieve,
               trash,
-              noteData?.selectedLabels,
+              noteData?.labelData,
             );
           }}>
           <AntDesign name="arrowleft" size={25} color={'black'} />
@@ -95,7 +108,7 @@ const NewNotes = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
+      <View style={{flex: 1}}>
         <TextInput
           style={Styles.titleTextInput}
           value={title}
@@ -115,12 +128,14 @@ const NewNotes = () => {
             setNote(text);
           }}
         />
+        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+          <Chip chipData={chipData} />
+        </View>
       </View>
 
       <View
         style={{
           flexDirection: 'row',
-          marginTop: '135%',
           padding: 16,
           justifyContent: 'space-between',
         }}>
@@ -152,6 +167,9 @@ const NewNotes = () => {
         <Modal
           transparent={true}
           animationType="slide"
+          onDismiss={() => {
+            setModalVisible(false);
+          }}
           visible={modalVisible}
           onRequestClose={() => setModalVisible(false)}>
           <View style={Styles.modalView}>
@@ -159,7 +177,9 @@ const NewNotes = () => {
               <TouchableOpacity
                 style={{flexDirection: 'row'}}
                 onPress={() => {
-                  navigation.navigate('LabelsList');
+                  navigation.navigate('LabelsList', {
+                    lablelIds: noteData?.labelData,
+                  });
                   setModalVisible(false);
                 }}>
                 <Icons
@@ -198,6 +218,11 @@ const Styles = StyleSheet.create({
   },
   notesTextInput: {
     marginLeft: 10,
+    fontSize: 15,
+    color: 'black',
+  },
+  labelText: {
+    marginLeft: 15,
     fontSize: 15,
     color: 'black',
   },

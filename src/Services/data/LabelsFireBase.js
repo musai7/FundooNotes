@@ -54,7 +54,22 @@ const LabelsFireBase = () => {
       }
     }
   };
-  return {storeLabelsData, FetchLabelData, labelData, updateLabelData};
+
+  const deleteLabelData = async key => {
+    try {
+      await response.doc(token).collection('labels').doc(key).delete();
+      console.log('deleted data');
+    } catch (error) {
+      console.log('error....', error);
+    }
+  };
+  return {
+    storeLabelsData,
+    FetchLabelData,
+    labelData,
+    updateLabelData,
+    deleteLabelData,
+  };
 };
 
 export default LabelsFireBase;

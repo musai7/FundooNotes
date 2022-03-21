@@ -3,7 +3,11 @@ import React, {useState} from 'react';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const LabelsListCard = ({item, selectedLabels, setSelectedLabels}) => {
-  const [checkBox, setCheckBox] = useState(false);
+  const [checkBox, setCheckBox] = useState(
+    selectedLabels?.includes(item.key) ? true : false,
+  );
+
+  console.log('selectedLabels', selectedLabels);
 
   const onPressHandler = item => {
     if (selectedLabels.includes(item.key)) {
@@ -11,7 +15,7 @@ const LabelsListCard = ({item, selectedLabels, setSelectedLabels}) => {
       setSelectedLabels(newselectedLabels);
     } else setSelectedLabels([...selectedLabels, item.key]);
   };
-  console.log('selectedLabels Array => ', selectedLabels);
+  console.log('selectedLabels', selectedLabels);
   return (
     <View
       style={{
@@ -23,6 +27,9 @@ const LabelsListCard = ({item, selectedLabels, setSelectedLabels}) => {
         marginRight: '5%',
       }}>
       <TouchableOpacity
+        onPress={() => {
+          setCheckBox(!checkBox);
+        }}
         style={{
           flexDirection: 'row',
           alignItems: 'center',

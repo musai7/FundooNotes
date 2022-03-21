@@ -8,6 +8,7 @@ import SignOut from '../screens/SignOut';
 import DrawerLabelCards from '../screens/labels/DrawerLabelCards';
 import LabelsFireBase from '../Services/data/LabelsFireBase';
 import {useSelector} from 'react-redux';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const DrawerContents = ({props}) => {
   const navigation = useNavigation();
@@ -47,16 +48,16 @@ const DrawerContents = ({props}) => {
           {labelData.length > 0 ? (
             <View style={Styles.labelHeader}>
               <Text style={Styles.labelText}>Labels</Text>
-              <Text style={Styles.labelText}>Edits</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('EditLabels');
+                }}>
+                <Text style={Styles.labelText}>Edits</Text>
+              </TouchableOpacity>
             </View>
           ) : null}
-          <FlatList
-            data={labelData}
-            keyExtractor={item => item.key}
-            renderItem={({item}) => (
-              <DrawerLabelCards item={item} navigation={navigation} />
-            )}
-          />
+          <DrawerLabelCards labelData={labelData} navigation={navigation} />
+
           <DrawerItem
             icon={({color, size}) => (
               <Icon name="plus" color={color} size={size} />

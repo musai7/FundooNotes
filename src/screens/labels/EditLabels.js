@@ -84,8 +84,6 @@ const EditLabels = () => {
           <LabelCards item={item} navigation={navigation} />
         )}
       />
-
-      {/* <LabelCards /> */}
     </View>
   );
 };
