@@ -73,9 +73,11 @@ const NewNotes = () => {
   console.log('date', new Date(remainder));
 
   const handleNotification = () => {
-    PushNotification.localNotification({
+    PushNotification.localNotificationSchedule({
       channelId: 'test-channel',
-      id: noteData?.key,
+      channelName: 'Test Channel',
+      // id: noteData?.key,
+      date: new Date(moment(remainder, 'YYYY-MM-DD hh:mm')),
       title: 'remainder',
       message: 'Empty Notes',
     });

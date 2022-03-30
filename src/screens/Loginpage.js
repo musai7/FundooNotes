@@ -98,7 +98,7 @@ const Loginpage = ({navigation}) => {
             onChangeText={text => setText(text)}
             placeholder="Enter Password"
             secureTextEntry={passwordVisibility}
-            onChangeText={text => setPassword(text)}
+            // onChangeText={text => setPassword(text)}
             onBlur={validatePasswordlOnBlur}
             right={
               <TextInput.Icon
