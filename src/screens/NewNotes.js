@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,23 @@ import {useRoute} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import Chip from '../components/Chip';
+import RemainderModal from '../components/Modal';
+import RemainderChip from '../components/RemainderChip';
+import EditeditRemainderModal from '../components/EditRemainderModal';
+import PushNotification from 'react-native-push-notification';
+import moment from 'moment';
+import SQLite from 'react-native-sqlite-storage';
+
+const db = SQLite.openDatabase(
+  {
+    name: 'MainDB',
+    location: 'default',
+  },
+  () => {},
+  err => {
+    console.log(err);
+  },
+);
 
 const NewNotes = () => {
   const noteData = useRoute().params;
@@ -32,10 +49,18 @@ const NewNotes = () => {
   const [trash, setTrash] = useState(noteData?.delete || false);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [remainderModal, setRemainderModal] = useState(false);
+  const [editRemainderModal, setEditRemainderModal] = useState(false);
+  const [alarm, setAlarm] = useState();
+  const [remainder, setRemainder] = useState(noteData?.remainder || '');
   const {labelData} = useSelector(state => state.userReducer);
-  console.log('labelData', labelData);
 
   const [key] = useState(noteData?.key || '');
+  console.log('noteData', noteData);
+
+  useEffect(() => {
+    createTable();
+  }, []);
 
   let chipData = labelData.filter(labels => {
     for (let index = 0; index < noteData?.labelData?.length; index++) {
@@ -44,7 +69,67 @@ const NewNotes = () => {
       }
     }
   });
-  console.log('chipdata', chipData);
+  console.log('remainder', remainder);
+  console.log('date', new Date(remainder));
+
+  const handleNotification = () => {
+    PushNotification.localNotification({
+      channelId: 'test-channel',
+      id: noteData?.key,
+      title: 'remainder',
+      message: 'Empty Notes',
+    });
+    console.log('noti');
+  };
+
+  const createTable = async () => {
+    await db.transaction(tx => {
+      tx.executeSql(
+        'CREATE TABLE IF NOT EXISTS' +
+          'UserNotes' +
+          '(ID INTEGER PRIMARY KEY AUTOINCREMENT, title text,note text);',
+      );
+    });
+  };
+
+  const setData = async () => {
+    if (title.length !== 0 || note.length !== 0) {
+      try {
+        await db.transaction(tx => {
+          tx.executeSql(
+            'INSERT INTO UserNotes (title,note) VALUES (' +
+              title +
+              ',' +
+              note +
+              ')',
+          );
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const getData = async () => {
+    try {
+      await db.transaction(tx => {
+        tx.executeSql('SELECT title,note from UserNotes', [], (tx, results) => {
+          console.log('getData');
+
+          let len = results.rows.length;
+          if (len > 0) {
+            console.log('title->', results.rows.item(0).title);
+            console.log('notes->', results.rows.item(0).notes);
+          }
+        });
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getData();
+
   return (
     <View style={{flex: 1}}>
       <View style={Styles.header}>
@@ -59,7 +144,14 @@ const NewNotes = () => {
               archieve,
               trash,
               noteData?.labelData,
+              remainder,
             );
+            if (remainder !== null) {
+              // if (remainder > moment().format('YYYY-MM-DD hh:mm')) {
+              handleNotification();
+            }
+            // }
+            setData();
           }}>
           <AntDesign name="arrowleft" size={25} color={'black'} />
         </TouchableOpacity>
@@ -76,7 +168,10 @@ const NewNotes = () => {
               color={'black'}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => {
+              setRemainderModal(true);
+            }}>
             <AntDesign
               style={Styles.icon}
               name="bells"
@@ -129,8 +224,31 @@ const NewNotes = () => {
           }}
         />
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+          <RemainderChip
+            remainder={remainder}
+            alarm={alarm}
+            setEditRemainderModal={setEditRemainderModal}
+          />
           <Chip chipData={chipData} />
         </View>
+
+        <RemainderModal
+          remainderModal={remainderModal}
+          setRemainderModal={setRemainderModal}
+          setAlarm={setAlarm}
+          setEditRemainderModal={setEditRemainderModal}
+          setRemainder={setRemainder}
+        />
+
+        <EditeditRemainderModal
+          editRemainderModal={editRemainderModal}
+          setEditRemainderModal={setEditRemainderModal}
+          setRemainder={setRemainder}
+          remainder={remainder}
+          setAlarm={setAlarm}
+          alarm={alarm}
+          keys={noteData?.key}
+        />
       </View>
 
       <View
@@ -175,7 +293,7 @@ const NewNotes = () => {
           <View style={Styles.modalView}>
             <View style={{padding: '5%'}}>
               <TouchableOpacity
-                style={{flexDirection: 'row'}}
+                style={{flexDirection: 'row', marginBottom: '2%'}}
                 onPress={() => {
                   navigation.navigate('LabelsList', {
                     lablelIds: noteData?.labelData,
@@ -189,6 +307,20 @@ const NewNotes = () => {
                   color={'black'}
                 />
                 <Text style={{color: 'black', fontSize: 20}}>Labels</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{flexDirection: 'row'}}
+                onPress={() => {
+                  setTrash(!trash);
+                  setModalVisible(false);
+                }}>
+                <Icon
+                  style={Styles.icon}
+                  name={trash ? 'trash' : 'trash-outline'}
+                  size={25}
+                  color={'black'}
+                />
+                <Text style={{color: 'black', fontSize: 20}}> Delete</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -228,10 +360,10 @@ const Styles = StyleSheet.create({
   },
   modalView: {
     justifyContent: 'space-between',
-    marginVertical: '140%',
+    marginVertical: '160%',
     backgroundColor: 'white',
     width: '100%',
-    height: '28%',
+    height: '20%',
     elevation: 20,
   },
 });

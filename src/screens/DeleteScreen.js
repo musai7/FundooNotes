@@ -26,6 +26,8 @@ const Delete = () => {
           style={{
             height: '7%',
             flexDirection: 'row',
+            marginTop: '2%',
+            marginBottom: '2%',
             justifyContent: 'space-between',
           }}>
           <View
@@ -122,13 +124,11 @@ const Styles = StyleSheet.create({
     fontSize: 18,
   },
   view: {
-    backgroundColor: '#deb876',
     marginLeft: '5%',
     marginRight: '5%',
     marginBottom: '2%',
     padding: '2%',
     borderWidth: 1,
     borderRadius: 10,
-    // width: '40%',
   },
 });

@@ -1,8 +1,9 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Text, View, StyleSheet, Pressable, ScrollView} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
 import {SingIn} from '../Services/Auth/Authantication';
 import {AuthContext} from '../navigation/AuthContext';
+import PushNotification from 'react-native-push-notification';
 
 const Loginpage = ({navigation}) => {
   const [password, setPassword] = useState('');
@@ -13,6 +14,15 @@ const Loginpage = ({navigation}) => {
 
   const {setToken} = useContext(AuthContext);
 
+  useEffect(() => {
+    createChannels();
+  });
+  const createChannels = () => {
+    PushNotification.createChannel({
+      channelId: 'test-channel',
+      channelName: 'Test Channel',
+    });
+  };
   const setTokenValue = uid => {
     setToken(uid);
   };

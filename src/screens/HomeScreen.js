@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import BottomBar from '../components/BottomBar';
 import Notes from '../components/Notes';
 import useFetchNotes from '../Services/data/FetchNotes';
+import PushNotification from 'react-native-push-notification';
 
 const HomeScreen = ({navigation}) => {
   const {pinNoteData, unPinNoteData, fetchNoteData} = useFetchNotes();
@@ -24,9 +25,17 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
+    // createChannels();
     const unsibscribe = navigation.addListener('focus', () => fetchNoteData());
     return unsibscribe;
   }, [fetchNoteData]);
+
+  // const createChannels = () => {
+  //   PushNotification.createChannel({
+  //     channelId: 'test-channel',
+  //     channelName: 'Test Channel',
+  //   });
+  // };
 
   const sections = [
     {title: 'pinned', data: [pinNoteData]},

@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -17,9 +17,19 @@ import NewDrawingNote from '../screens/NewDrawingNote';
 import NewNotes from '../screens/NewNotes';
 import SearchNotes from '../screens/SearchNotes';
 import LabelsList from '../screens/labels/LabelsList';
+import PushNotification from 'react-native-push-notification';
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
+  // useEffect(() => {
+  //   createChannels();
+  // });
+  // const createChannels = () => {
+  //   PushNotification.createChannel({
+  //     channelId: 'test-channel',
+  //     channelName: 'Test Channel',
+  //   });
+  // };
   return (
     <AuthProvider>
       {token => (

@@ -67,6 +67,7 @@ const useFetchNotes = () => {
     archieve,
     trash,
     labelData,
+    remainder,
   ) => {
     if (isUpDate) {
       if (note.length !== 0 || title.length !== 0) {
@@ -77,6 +78,7 @@ const useFetchNotes = () => {
           archieve: archieve,
           delete: trash,
           labelData: labelData,
+          remainder: remainder,
         });
         console.log('notes updated');
       }
@@ -94,6 +96,7 @@ const useFetchNotes = () => {
               archieve: archieve,
               delete: false,
               labelData: labelData || [],
+              remainder: remainder,
             });
           console.log('notes added');
         }

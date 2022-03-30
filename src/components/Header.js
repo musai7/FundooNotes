@@ -179,9 +179,10 @@ export default Header;
 
 const Styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
+    borderWidth: 0.8,
     borderRadius: 25,
-    margin: '2%',
+    margin: '5%',
+    marginBottom: '5%',
     alignSelf: 'center',
     padding: '2%',
     flexDirection: 'row',
@@ -189,7 +190,7 @@ const Styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: '7%',
-    width: '90%',
+    width: '95%',
   },
   view: {
     flexDirection: 'row',

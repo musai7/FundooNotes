@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 const Chip = ({chipData}) => {
   let ChipArray = [];
-  console.log(chipData);
   for (let index = 0; index < chipData.length; index++) {
     ChipArray.push(
       <View style={Styles.labelText} key={chipData[index].labelName}>
@@ -10,12 +9,6 @@ const Chip = ({chipData}) => {
       </View>,
     );
   }
-  // ChipArray = chipData?.length ?? (
-  //   <View style={Styles.labelText} key={chipData.labelName}>
-  //     <Text style={{color: 'black'}}>{chipData.labelName}</Text>
-  //   </View>
-  // );
-
   return ChipArray;
 };
 
